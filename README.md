@@ -41,3 +41,11 @@ Unclutter: Removes mouse display when not in use. <br>
 ```sudo apt install unclutter -y``` <br>
 Xdotool: Allows automation and simulation of keyboard and mouse input. <br>
 ```sudo apt install xdotool -y``` <br>
+
+
+## Optimization Changes
+
+- Eliminated the need for the `time` module by using other parts of PyQt.
+- Used a dictionary to store button configurations, reducing code duplication.
+- Created a signal mapper for button clicks to simplify the code and eliminate the need for separate functions for each button.
+- Moved the UI configuration code into a separate function for better code organization and readability.

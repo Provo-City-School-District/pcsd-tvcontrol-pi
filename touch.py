@@ -1,67 +1,81 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import QTimer,QEventLoop
+from PyQt5.QtCore import Qt, QSignalMapper, QTimer, QEventLoop
 import sys
-# from time import sleep
 import os
 
 os.environ['DISPLAY'] = ':0'
 
-# function to handle sleep. eliminates the need to call sleep from time multiple times.
+
 def delay(seconds):
     loop = QEventLoop()
     QTimer.singleShot(int(seconds * 1000), loop.quit)
     loop.exec_()
 
 
+def handleButton(index):
+    if index == 1:
+        print("Epson ON")
+        os.system('echo "pwr on" > /dev/ttyUSB0')
+        delay(0.01)
+    elif index == 2:
+        print("Epson OFF")
+        os.system('echo "source 30" > /dev/ttyUSB0')
+        delay(3)
+        os.system('echo "pwr off" > /dev/ttyUSB0')
+        delay(0.5)
+    elif index == 3:
+        print("Epson Apple TV")
+        os.system('echo "pwr on" > /dev/ttyUSB0')
+        delay(0.01)
+        os.system('echo "source 30" > /dev/ttyUSB0')
+        delay(0.01)
+    elif index == 4:
+        print("Epson HDMI")
+        os.system('echo "pwr on" > /dev/ttyUSB0')
+        delay(0.01)
+        os.system('echo "source a0" > /dev/ttyUSB0')
+        delay(0.01)
+    elif index == 5:
+        print("Epson Volume Up")
+        os.system('echo "vol inc" > /dev/ttyUSB0')
+        delay(0.01)
+    elif index == 6:
+        print("Epson Volume Down")
+        os.system('echo "vol dec" > /dev/ttyUSB0')
+        delay(0.01)
 
 
-def clickMethod1():
-    print ("Epson ON")
-    os.system('echo "pwr on" > /dev/ttyUSB0')
-    delay(.01)
+def configureUI(win):
+    label = QLabel("Built by Chad Duncan", win)
+    label.move(20, 0)
 
+    buttonConfigs = {
+        1: {"pos": (71, 44), "size": (160, 160), "image": "onbutton.png"},
+        2: {"pos": (71, 270), "size": (160, 160), "image": "offbutton.png"},
+        3: {"pos": (324, 44), "size": (160, 160), "image": "appletvbutton.png"},
+        4: {"pos": (324, 270), "size": (160, 160), "image": "hdmibutton.png"},
+        5: {"pos": (578, 44), "size": (160, 160), "image": "volumeupbutton.png"},
+        6: {"pos": (578, 270), "size": (160, 160), "image": "volumedownbutton.png"}
+    }
 
-def clickMethod2():
-    print ("Epson OFF")
-    os.system('echo "source 30" > /dev/ttyUSB0')
-    delay(3)
-    os.system('echo "pwr off" > /dev/ttyUSB0')
-    delay(.5)
+    signalMapper = QSignalMapper(win)
+    signalMapper.mapped.connect(handleButton)
 
+    for index, config in buttonConfigs.items():
+        button = QPushButton(win)
+        button.move(*config["pos"])
+        button.resize(*config["size"])
+        button.clicked.connect(signalMapper.map)
+        signalMapper.setMapping(button, index)
+        button.setStyleSheet(f"background-image: url({config['image']}); border: none;")
 
-def clickMethod3():
-    print ("Epson Apple TV")
-    os.system('echo "pwr on" > /dev/ttyUSB0')
-    delay(.01)
-    os.system('echo "source 30" > /dev/ttyUSB0')
-    delay(.01)
-
-
-def clickMethod4():
-    print ("Epson HDMI")
-    os.system('echo "pwr on" > /dev/ttyUSB0')
-    delay(.01)
-    os.system('echo "source a0" > /dev/ttyUSB0')
-    delay(.01)
-
-
-def clickMethod5():
-    print ("Epson Volume Up")
-    os.system('echo "vol inc" > /dev/ttyUSB0')
-    delay(.01)
-
-
-def clickMethod6():
-    print ("Epson Volume Down")
-    os.system('echo "vol dec" > /dev/ttyUSB0')
-    delay(.01)
+    win.show()
 
 
 stylesheet = """
     QMainWindow {
-        background-image: url("background.png"); 
-        background-repeat: no-repeat; 
+        background-image: url("background.png");
+        background-repeat: no-repeat;
         background-position: center;
     }
 """
@@ -70,57 +84,10 @@ app = QApplication([])
 app.setStyleSheet(stylesheet)
 win = QMainWindow()
 win.setWindowTitle("Test")
-win.resize(800,480)
-win.move(0,0)
+win.resize(800, 480)
+win.move(0, 0)
 win.setWindowFlag(Qt.FramelessWindowHint)
 
-label = QLabel("Built by Chad Duncan", win)
-label.move(20,0)
-
-button1 = QPushButton(win)
-button1.move(71,44) #edge, top
-button1.resize(160,160)
-button1.clicked.connect(clickMethod1)
-button1.setStyleSheet("background-image : url(onbutton.png); border: none;")
-
-
-button2 = QPushButton(win)
-button2.move(71,270) #edge, top
-button2.resize(160,160)
-button2.clicked.connect(clickMethod2)
-button2.setStyleSheet("background-image : url(offbutton.png); border: none;")
-
-button3 = QPushButton(win)
-button3.move(324,44) #(edge, top)
-button3.resize(160,160)
-button3.clicked.connect(clickMethod3)
-button3.setStyleSheet("background-image : url(appletvbutton.png); border: none;")
-
-button4 = QPushButton(win)
-button4.move(324,270) #(edge, top)
-button4.resize(160,160)
-button4.clicked.connect(clickMethod4)
-button4.setStyleSheet("background-image : url(hdmibutton.png); border: none;")
-
-button5 = QPushButton(win)
-button5.move(578,44) #(edge, top)
-button5.resize(160,160)
-button5.setAutoRepeat(True)
-button5.setAutoRepeatDelay(500)
-button5.setAutoRepeatInterval(500)
-button5.clicked.connect(clickMethod5)
-button5.setStyleSheet("background-image : url(volumeupbutton.png); border: none;")
-
-button6 = QPushButton(win)
-button6.move(578,270) #(edge, top)
-button6.resize(160,160)
-button6.setAutoRepeat(True)
-button6.setAutoRepeatDelay(500)
-button6.setAutoRepeatInterval(500)
-button6.clicked.connect(clickMethod6)
-button6.setStyleSheet("background-image : url(volumedownbutton.png); border: none;")
-
-
-win.show()
+configureUI(win)
 
 sys.exit(app.exec_())
