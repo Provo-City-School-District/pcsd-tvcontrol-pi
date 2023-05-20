@@ -27,7 +27,7 @@ Open the crontab file:<br>
 ```crontab -e``` <br>
 <br>
 running with a start script with crontab so that the program executes at startup. <br>
-```@reboot sleep 15 && /home/pi/pcsd-tvcontrol-pi/start.sh``` <br>
+```@reboot sleep 15 && /bin/python /home/pi/pcsd-tvcontrol-pi/touch.py``` <br>
 
 ## ScreenSaver (optional) 
 If desired, you can install Xscreensaver: <br>
