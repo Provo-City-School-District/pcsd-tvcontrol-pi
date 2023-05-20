@@ -46,8 +46,8 @@ def handleButton(index):
 
 
 def configureUI(win):
-    label = QLabel("Built by Chad Duncan", win)
-    label.move(20, 0)
+    # label = QLabel("Built by Chad Duncan", win)
+    # label.move(20, 0)
 
     buttonConfigs = {
         1: {"pos": (71, 44), "size": (160, 160), "image": "onbutton.png"},
@@ -83,7 +83,7 @@ stylesheet = """
 app = QApplication([])
 app.setStyleSheet(stylesheet)
 win = QMainWindow()
-win.setWindowTitle("Test")
+win.setWindowTitle("Built by Chad Duncan")
 win.resize(800, 480)
 win.move(0, 0)
 win.setWindowFlag(Qt.FramelessWindowHint)
