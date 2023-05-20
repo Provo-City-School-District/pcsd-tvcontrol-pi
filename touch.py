@@ -1,51 +1,61 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
 from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QTimer,QEventLoop
 import sys
-from time import sleep
+# from time import sleep
 import os
 
 os.environ['DISPLAY'] = ':0'
 
+# function to handle sleep. eliminates the need to call sleep from time multiple times.
+def delay(seconds):
+    loop = QEventLoop()
+    QTimer.singleShot(int(seconds * 1000), loop.quit)
+    loop.exec_()
+
+
+
+
 def clickMethod1():
     print ("Epson ON")
     os.system('echo "pwr on" > /dev/ttyUSB0')
-    sleep(.01)
+    delay(.01)
 
 
 def clickMethod2():
     print ("Epson OFF")
     os.system('echo "source 30" > /dev/ttyUSB0')
-    sleep(3)
+    delay(3)
     os.system('echo "pwr off" > /dev/ttyUSB0')
-    sleep(.5)
+    delay(.5)
 
 
 def clickMethod3():
     print ("Epson Apple TV")
     os.system('echo "pwr on" > /dev/ttyUSB0')
-    sleep(.01)
+    delay(.01)
     os.system('echo "source 30" > /dev/ttyUSB0')
-    sleep(.01)
+    delay(.01)
 
 
 def clickMethod4():
     print ("Epson HDMI")
     os.system('echo "pwr on" > /dev/ttyUSB0')
-    sleep(.01)
+    delay(.01)
     os.system('echo "source a0" > /dev/ttyUSB0')
-    sleep(.01)
+    delay(.01)
 
 
 def clickMethod5():
     print ("Epson Volume Up")
     os.system('echo "vol inc" > /dev/ttyUSB0')
-    sleep(.01)
+    delay(.01)
 
 
 def clickMethod6():
     print ("Epson Volume Down")
     os.system('echo "vol dec" > /dev/ttyUSB0')
-    sleep(.01)
+    delay(.01)
 
 
 stylesheet = """
