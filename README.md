@@ -1,8 +1,8 @@
 # pcsd-tvcontrol-pi
-python program to control projectors using a raspberry pi with a touchscreen. could be implimented to any device that is connected to a projector or TV though. could be modified to control TV with CEC capabilities
+This is a Python program designed to control projectors using a Raspberry Pi with a touchscreen. It can also be adapted to work with other devices connected to projectors or TVs. Additionally, it can be modified to control TVs with CEC capabilities.
 
-## build environment (Recommended)
-be aware that you might need to modify the commands mentioned below, replacing "python" with "python3" and "pip" with "pip3" depending on your device, as different operating systems have varying default installation methods.
+## Build Environment (Recommended)
+Please note that you may need to modify the commands below based on your specific device. Different operating systems have varying default installation methods, so replace "python" with "python3" and "pip" with "pip3" if necessary.
 
 Clone <br>
 ```git clone https://github.com/Provo-City-School-District/pcsd-tvcontrol-pi.git``` <br>
@@ -13,26 +13,31 @@ Change to the repository directory: <br>
 Create a virtual environment: <br>
 ```python3 -m venv env``` <br>
 <br>
-Activate <br>
-Mac/Linux <br>
+Activate the virtual environment: <br>
+macOS/Linux <br>
 ```source env/bin/activate``` <br>
-On Windows: <br>
+Windows: <br>
 ```.\env\Scripts\activate``` <br>
 <br>
-install dependencies if not already installed <br>
+Install dependencies if not already installed:<br>
 ```pip install -r requirements.txt``` <br>
 
-## start from crontab
+## Starting from Crontab
+Open the crontab file:<br>
+```crontab -e``` <br>
+<br>
 running with a start script with crontab so that the program executes at startup. <br>
 ```@reboot sleep 15 && /home/pi/pcsd-tvcontrol-pi/start.sh``` <br>
 
 ## ScreenSaver (optional) 
-### Xscreensaver Installation
+If desired, you can install Xscreensaver: <br>
 ```sudo apt install xscreensaver xscreensaver-data xscreensaver-data-extra -y``` <br>
 
-## optional installations
+## Optional Installations
 ### Linux
-unclutter - removes mouse display while not in use <br>
+To further enhance the program, you can consider the following optional installations: <br>
+<br>
+Unclutter: Removes mouse display when not in use. <br>
 ```sudo apt install unclutter -y``` <br>
-xdotool - allows you to automate and simulate keyboard and mouse input <br>
+Xdotool: Allows automation and simulation of keyboard and mouse input. <br>
 ```sudo apt install xdotool -y``` <br>
