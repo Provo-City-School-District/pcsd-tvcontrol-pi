@@ -6,28 +6,33 @@ be aware that you might need to modify the commands mentioned below, replacing "
 
 Clone <br>
 ```git clone https://github.com/Provo-City-School-District/pcsd-tvcontrol-pi.git``` <br>
+<br>
 Change to the repository directory: <br>
 ```cd pcsd-tvcontrol-pi``` <br>
+<br>
 Create a virtual environment: <br>
 ```python3 -m venv env``` <br>
+<br>
 Activate <br>
 Mac/Linux <br>
 ```source env/bin/activate``` <br>
 On Windows: <br>
 ```.\env\Scripts\activate``` <br>
+<br>
 install dependencies if not already installed <br>
 ```pip install -r requirements.txt``` <br>
+
 ## start from crontab
-running with a start script with crontab so that the program executes at startup. \\
-```@reboot sleep 15 && /home/pi/pcsd-tvcontrol-pi/start.sh``` \\
+running with a start script with crontab so that the program executes at startup. <br>
+```@reboot sleep 15 && /home/pi/pcsd-tvcontrol-pi/start.sh``` <br>
 
 ## ScreenSaver (optional) 
 ### Xscreensaver Installation
-```sudo apt install xscreensaver xscreensaver-data xscreensaver-data-extra -y``` \\
+```sudo apt install xscreensaver xscreensaver-data xscreensaver-data-extra -y``` <br>
 
 ## optional installations
 ### Linux
-unclutter - removes mouse display while not in use \\
-```sudo apt install unclutter -y``` \\
-xdotool - allows you to automate and simulate keyboard and mouse input \\
-```sudo apt install xdotool -y``` \\
+unclutter - removes mouse display while not in use <br>
+```sudo apt install unclutter -y``` <br>
+xdotool - allows you to automate and simulate keyboard and mouse input <br>
+```sudo apt install xdotool -y``` <br>
