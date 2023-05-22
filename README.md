@@ -39,7 +39,7 @@ To further enhance the program, you can consider the following optional installa
 <br>
 Unclutter: Removes mouse display when not in use. <br>
 ```sudo apt install unclutter -y``` <br>
-Xdotool: Allows automation and simulation of keyboard and mouse input. <br>
+Xdotool: Allows automation and simulation of keyboard and mouse input. (Required if you want to wake from screensaver from motion camera) <br>
 ```sudo apt install xdotool -y``` <br>
 
 
