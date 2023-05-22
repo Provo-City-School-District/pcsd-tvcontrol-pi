@@ -50,12 +50,12 @@ def configureUI(win):
     # label.move(20, 0)
 
     buttonConfigs = {
-        1: {"pos": (71, 44), "size": (160, 160), "image": "onbutton.png"},
-        2: {"pos": (71, 270), "size": (160, 160), "image": "offbutton.png"},
-        3: {"pos": (324, 44), "size": (160, 160), "image": "appletvbutton.png"},
-        4: {"pos": (324, 270), "size": (160, 160), "image": "hdmibutton.png"},
-        5: {"pos": (578, 44), "size": (160, 160), "image": "volumeupbutton.png"},
-        6: {"pos": (578, 270), "size": (160, 160), "image": "volumedownbutton.png"}
+        1: {"pos": (71, 44), "size": (160, 160), "image": "images/onbutton.png"},
+        2: {"pos": (71, 270), "size": (160, 160), "image": "images/offbutton.png"},
+        3: {"pos": (324, 44), "size": (160, 160), "image": "images/appletvbutton.png"},
+        4: {"pos": (324, 270), "size": (160, 160), "image": "images/hdmibutton.png"},
+        5: {"pos": (578, 44), "size": (160, 160), "image": "images/volumeupbutton.png"},
+        6: {"pos": (578, 270), "size": (160, 160), "image": "images/volumedownbutton.png"}
     }
 
     signalMapper = QSignalMapper(win)
@@ -74,7 +74,7 @@ def configureUI(win):
 
 stylesheet = """
     QMainWindow {
-        background-image: url("background.png");
+        background-image: url("images/background.png");
         background-repeat: no-repeat;
         background-position: center;
     }
