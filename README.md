@@ -26,8 +26,8 @@ Install dependencies if not already installed:<br>
 Open the crontab file:<br>
 ```crontab -e``` <br>
 <br>
-running with a start script with crontab so that the program executes at startup. <br>
-```@reboot sleep 15 && /bin/python /home/pi/pcsd-tvcontrol-pi/touch.py``` <br>
+running with a start script with crontab so that the program executes at startup. Remember, if you're using a vevn to call that python<br>
+```@reboot sleep 15 && cd /home/pi/pcsd-tvcontrol-pi/ && /bin/python3 /home/pi/pcsd-tvcontrol-pi/touch.py >> /home/pi/cron.log 2>&1``` <br>
 
 ## ScreenSaver (optional) 
 If desired, you can install Xscreensaver: <br>
@@ -49,3 +49,4 @@ Xdotool: Allows automation and simulation of keyboard and mouse input. <br>
 - Used a dictionary to store button configurations, reducing code duplication.
 - Created a signal mapper for button clicks to simplify the code and eliminate the need for separate functions for each button.
 - Moved the UI configuration code into a separate function for better code organization and readability.
+- Uses venv ti insure proper modules
