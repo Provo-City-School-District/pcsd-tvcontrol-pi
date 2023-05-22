@@ -4,8 +4,6 @@ import sys
 import os
 import subprocess
 import threading
-# import cv2
-# import dbus
 import picamera
 import picamera.array
 import numpy as np
@@ -73,33 +71,23 @@ def configureUI(win):
     win.show()
 
 def preventScreensaver():
-    subprocess.run(["xdotool", "mousemove", "1", "1"])
-
+    print('motion detected')
+    subprocess.run(['xdotool', 'keydown', 'Shift_L'])
+    subprocess.run(['xdotool', 'keyup', 'Shift_L'])
 
 def disableScreensaver():
-    print('motion detected')
-    subprocess.run(['xset', 's', 'off'])
     preventScreensaver()
-
-
-# def detectMotion():
-#     # Your motion detection logic goes here
-#     preventScreensaver()
-
-
-
-
 
 def detectMotion():
     with picamera.PiCamera() as camera:
-        camera.resolution = (640, 480)
+        camera.resolution = (320, 240)  # set camera the resolution to 320x240
         camera.framerate = 24
 
         # Initialize previous frame
-        prev_frame = np.empty((480, 640, 3), dtype=np.uint8)
+        prev_frame = np.empty((240, 320, 3), dtype=np.uint8)
 
         while True:
-            current_frame = np.empty((480, 640, 3), dtype=np.uint8)
+            current_frame = np.empty((240, 320, 3), dtype=np.uint8)
             camera.capture(current_frame, 'rgb', use_video_port=True)
 
             # Calculate the absolute difference between the current frame and the previous frame
@@ -119,12 +107,6 @@ def detectMotion():
 
             prev_frame = current_frame
 
-
-
-
-
-
-
 def main():
     app = QApplication([])
     app.setOverrideCursor(Qt.BlankCursor)
@@ -139,11 +121,12 @@ def main():
     app.setStyleSheet(stylesheet)
 
     win = QMainWindow()
+    win.showFullScreen()
     win.setWindowTitle("Built by Chad Duncan")
-    win.resize(800, 480)
+    win.resize(810, 480)
     win.move(0, 0)
     win.setWindowFlag(Qt.FramelessWindowHint)
-
+    
     configureUI(win)
 
     # Create and start the motion detection thread
@@ -154,7 +137,14 @@ def main():
     screensaver_thread = threading.Thread(target=preventScreensaver)
     screensaver_thread.start()
 
-    sys.exit(app.exec_())
+    try:
+        sys.exit(app.exec_())
+    except KeyboardInterrupt:
+          # Handle Ctrl+C interruption
+        stop_event.set()  # Set the stop event to stop the motion thread
+        motion_thread.join()  # Wait for motion_thread to finish
+        screensaver_thread.join()  # Wait for screensaver_thread to finish
+        sys.exit()
 
 if __name__ == "__main__":
     main()
