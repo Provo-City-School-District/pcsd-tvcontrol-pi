@@ -2,15 +2,20 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QSignalMapper, QTimer, QEventLoop
 import sys
 import os
+import subprocess
+import threading
+# import cv2
+# import dbus
+import picamera
+import picamera.array
+import numpy as np
 
 os.environ['DISPLAY'] = ':0'
-
 
 def delay(seconds):
     loop = QEventLoop()
     QTimer.singleShot(int(seconds * 1000), loop.quit)
     loop.exec_()
-
 
 def handleButton(index):
     if index == 1:
@@ -44,11 +49,7 @@ def handleButton(index):
         os.system('echo "vol dec" > /dev/ttyUSB0')
         delay(0.01)
 
-
 def configureUI(win):
-    # label = QLabel("Built by Chad Duncan", win)
-    # label.move(20, 0)
-
     buttonConfigs = {
         1: {"pos": (71, 44), "size": (160, 160), "image": "images/onbutton.png"},
         2: {"pos": (71, 270), "size": (160, 160), "image": "images/offbutton.png"},
@@ -71,23 +72,89 @@ def configureUI(win):
 
     win.show()
 
+def preventScreensaver():
+    subprocess.run(["xdotool", "mousemove", "1", "1"])
 
-stylesheet = """
-    QMainWindow {
-        background-image: url("images/background.png");
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-"""
 
-app = QApplication([])
-app.setStyleSheet(stylesheet)
-win = QMainWindow()
-win.setWindowTitle("Built by Chad Duncan")
-win.resize(800, 480)
-win.move(0, 0)
-win.setWindowFlag(Qt.FramelessWindowHint)
+def disableScreensaver():
+    print('motion detected')
+    subprocess.run(['xset', 's', 'off'])
+    preventScreensaver()
 
-configureUI(win)
 
-sys.exit(app.exec_())
+# def detectMotion():
+#     # Your motion detection logic goes here
+#     preventScreensaver()
+
+
+
+
+
+def detectMotion():
+    with picamera.PiCamera() as camera:
+        camera.resolution = (640, 480)
+        camera.framerate = 24
+
+        # Initialize previous frame
+        prev_frame = np.empty((480, 640, 3), dtype=np.uint8)
+
+        while True:
+            current_frame = np.empty((480, 640, 3), dtype=np.uint8)
+            camera.capture(current_frame, 'rgb', use_video_port=True)
+
+            # Calculate the absolute difference between the current frame and the previous frame
+            frame_diff = np.abs(prev_frame.astype(np.int16) - current_frame.astype(np.int16)).astype(np.uint8)
+
+            # Convert the frame difference to grayscale
+            gray_diff = np.mean(frame_diff, axis=2)
+
+            # Apply thresholding to get the binary image
+            threshold = gray_diff > 30
+
+            # Check if any significant change (motion detected)
+            motion_detected = np.sum(threshold) > 100  # Adjust the threshold as per your requirements
+
+            if motion_detected:
+                disableScreensaver()
+
+            prev_frame = current_frame
+
+
+
+
+
+
+
+def main():
+    app = QApplication([])
+    app.setOverrideCursor(Qt.BlankCursor)
+
+    stylesheet = """
+        QMainWindow {
+            background-image: url("images/background.png");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    """
+    app.setStyleSheet(stylesheet)
+
+    win = QMainWindow()
+    win.setWindowTitle("Built by Chad Duncan")
+    win.resize(800, 480)
+    win.move(0, 0)
+    win.setWindowFlag(Qt.FramelessWindowHint)
+
+    configureUI(win)
+
+    # Create and start the motion detection thread
+    motion_thread = threading.Thread(target=detectMotion)
+    motion_thread.start()
+
+    # Create and start the screensaver prevention thread
+    screensaver_thread = threading.Thread(target=preventScreensaver)
+    screensaver_thread.start()
+
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()
